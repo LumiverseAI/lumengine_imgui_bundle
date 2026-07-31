@@ -22,7 +22,16 @@ set(LM_IMPLOT_GIT_TAG "2babf8b" CACHE STRING "ImPlot git commit/tag")
 set(LM_IMPLOT3D_GIT_TAG "6a27385" CACHE STRING "ImPlot3D git commit/tag")
 set(LM_IMGUI_NODE_EDITOR_GIT_TAG "4012569" CACHE STRING "ImGui Node Editor git commit/tag")
 set(LM_IMGUIZMO_GIT_TAG "b2e2e00" CACHE STRING "ImGuizmo git commit/tag")
-set(LM_IMGUI_COLOR_TEXT_EDIT_GIT_TAG "5cab9991af64f3194312c01cb837ee3f89fa5292" CACHE STRING "ImGui Color Text Edit git commit/tag")
+set(_LM_IMGUI_COLOR_TEXT_EDIT_FIXED_TAG "5cab9991af64f3194312c01cb837ee3f89fa5292")
+set(LM_IMGUI_COLOR_TEXT_EDIT_GIT_TAG "${_LM_IMGUI_COLOR_TEXT_EDIT_FIXED_TAG}" CACHE STRING "ImGui Color Text Edit git commit/tag")
+
+# CMake preserves cache entries across incremental configurations. Migrate the
+# former bundle default so existing build trees receive the clearDocument fix;
+# keep every other value untouched so explicit dependency overrides still work.
+if(LM_IMGUI_COLOR_TEXT_EDIT_GIT_TAG STREQUAL "6c12676")
+    set(LM_IMGUI_COLOR_TEXT_EDIT_GIT_TAG "${_LM_IMGUI_COLOR_TEXT_EDIT_FIXED_TAG}" CACHE STRING "ImGui Color Text Edit git commit/tag" FORCE)
+endif()
+unset(_LM_IMGUI_COLOR_TEXT_EDIT_FIXED_TAG)
 set(LM_IMGUI_MD_GIT_TAG "e8e7e5e" CACHE STRING "ImGui Markdown git commit/tag")
 set(LM_MD4C_GIT_TAG "e9ff661" CACHE STRING "md4c git commit/tag")
 set(LM_IMGUI_TOGGLE_GIT_TAG "6b9ced1" CACHE STRING "ImGui Toggle git commit/tag")
@@ -51,7 +60,8 @@ option(LM_IMGUI_BACKEND_OPENGL3 "Include OpenGL3 backend" OFF)
 # FetchContent setup
 include(FetchContent)
 set(FETCHCONTENT_QUIET OFF)
-set(FETCHCONTENT_UPDATES_DISCONNECTED ON)
+# Honor the caller's FetchContent connectivity setting. Existing build trees
+# must be able to fetch a newly pinned dependency revision.
 
 # ============================================================================
 # Fetch all libraries
