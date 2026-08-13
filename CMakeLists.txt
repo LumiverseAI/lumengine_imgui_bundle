@@ -17,27 +17,35 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 # ============================================================================
 # Library Git Tags/Commits
 # ============================================================================
-set(LM_IMGUI_GIT_TAG "74cba1e" CACHE STRING "ImGui git commit/tag")
-set(LM_IMPLOT_GIT_TAG "2babf8b" CACHE STRING "ImPlot git commit/tag")
-set(LM_IMPLOT3D_GIT_TAG "6a27385" CACHE STRING "ImPlot3D git commit/tag")
-set(LM_IMGUI_NODE_EDITOR_GIT_TAG "4012569" CACHE STRING "ImGui Node Editor git commit/tag")
-set(LM_IMGUIZMO_GIT_TAG "b2e2e00" CACHE STRING "ImGuizmo git commit/tag")
-set(_LM_IMGUI_COLOR_TEXT_EDIT_FIXED_TAG "5cab9991af64f3194312c01cb837ee3f89fa5292")
-set(LM_IMGUI_COLOR_TEXT_EDIT_GIT_TAG "${_LM_IMGUI_COLOR_TEXT_EDIT_FIXED_TAG}" CACHE STRING "ImGui Color Text Edit git commit/tag")
-
-# CMake preserves cache entries across incremental configurations. Migrate the
-# former bundle default so existing build trees receive the clearDocument fix;
-# keep every other value untouched so explicit dependency overrides still work.
-if(LM_IMGUI_COLOR_TEXT_EDIT_GIT_TAG STREQUAL "6c12676")
-    set(LM_IMGUI_COLOR_TEXT_EDIT_GIT_TAG "${_LM_IMGUI_COLOR_TEXT_EDIT_FIXED_TAG}" CACHE STRING "ImGui Color Text Edit git commit/tag" FORCE)
+# CMake keeps cache entries across incremental configurations, so a build tree
+# configured before a bump silently keeps fetching the previous commits. Stamp
+# the pin set with a generation id: when it changes, every pin below is forced
+# back to its new default exactly once. Bump the id in the same commit as the
+# pins. An explicit -DLM_*_GIT_TAG=... on the command line still wins, it is
+# simply re-applied on top of a refreshed generation.
+set(_LM_PIN_GENERATION "2026.08-imgui-1.92.8")
+set(_lm_pin_force "")
+if(NOT DEFINED LM_IMGUI_BUNDLE_PIN_GENERATION OR
+   NOT LM_IMGUI_BUNDLE_PIN_GENERATION STREQUAL _LM_PIN_GENERATION)
+    set(_lm_pin_force FORCE)
+    message(STATUS "ImGui bundle: applying pin generation ${_LM_PIN_GENERATION}")
 endif()
-unset(_LM_IMGUI_COLOR_TEXT_EDIT_FIXED_TAG)
-set(LM_IMGUI_MD_GIT_TAG "e8e7e5e" CACHE STRING "ImGui Markdown git commit/tag")
-set(LM_MD4C_GIT_TAG "e9ff661" CACHE STRING "md4c git commit/tag")
-set(LM_IMGUI_TOGGLE_GIT_TAG "6b9ced1" CACHE STRING "ImGui Toggle git commit/tag")
-set(LM_IMGUI_KNOBS_GIT_TAG "30785a4" CACHE STRING "ImGui Knobs git commit/tag")
-set(LM_IMGUI_COMMAND_PALETTE_GIT_TAG "6f09a39" CACHE STRING "ImGui Command Palette git commit/tag")
-set(LM_IMGUI_COOL_BAR_GIT_TAG "7e184da" CACHE STRING "ImGui Cool Bar git commit/tag")
+set(LM_IMGUI_BUNDLE_PIN_GENERATION "${_LM_PIN_GENERATION}"
+    CACHE INTERNAL "Generation id of the dependency pin set")
+
+set(LM_IMGUI_GIT_TAG "de2079f09" CACHE STRING "ImGui git commit/tag" ${_lm_pin_force})
+set(LM_IMPLOT_GIT_TAG "a3226777f" CACHE STRING "ImPlot git commit/tag" ${_lm_pin_force})
+set(LM_IMPLOT3D_GIT_TAG "be541bc3f" CACHE STRING "ImPlot3D git commit/tag" ${_lm_pin_force})
+set(LM_IMGUI_NODE_EDITOR_GIT_TAG "afa40649f" CACHE STRING "ImGui Node Editor git commit/tag" ${_lm_pin_force})
+set(LM_IMGUIZMO_GIT_TAG "a25157a6e" CACHE STRING "ImGuizmo git commit/tag" ${_lm_pin_force})
+set(LM_IMGUI_COLOR_TEXT_EDIT_GIT_TAG "20bc1ec8f" CACHE STRING "ImGui Color Text Edit git commit/tag" ${_lm_pin_force})
+set(LM_IMGUI_MD_GIT_TAG "1f131466a" CACHE STRING "ImGui Markdown git commit/tag" ${_lm_pin_force})
+set(LM_MD4C_GIT_TAG "481fbfbdf" CACHE STRING "md4c git commit/tag" ${_lm_pin_force})
+set(LM_IMGUI_TOGGLE_GIT_TAG "a9d363b57" CACHE STRING "ImGui Toggle git commit/tag" ${_lm_pin_force})
+set(LM_IMGUI_KNOBS_GIT_TAG "68af3d5c9" CACHE STRING "ImGui Knobs git commit/tag" ${_lm_pin_force})
+set(LM_IMGUI_COMMAND_PALETTE_GIT_TAG "6f09a39" CACHE STRING "ImGui Command Palette git commit/tag" ${_lm_pin_force})
+set(LM_IMGUI_COOL_BAR_GIT_TAG "ee3b07d0f" CACHE STRING "ImGui Cool Bar git commit/tag" ${_lm_pin_force})
+unset(_lm_pin_force)
 
 # Options to enable/disable each library component
 option(LM_IMGUI_BUILD_IMPLOT "Include ImPlot" ON)
@@ -105,10 +113,15 @@ endif()
 
 # ImGuizmo
 if(LM_IMGUI_BUILD_IMGUIZMO)
+    # Upstream now ships its own CMakeLists that builds a separate target with
+    # no knowledge of our ImGui; point SOURCE_SUBDIR at a directory that has
+    # none so MakeAvailable only populates the sources, which we compile into
+    # imgui_bundle ourselves.
     FetchContent_Declare(imguizmo
         GIT_REPOSITORY https://github.com/pthom/ImGuizmo.git
         GIT_TAG ${LM_IMGUIZMO_GIT_TAG}
         GIT_SHALLOW FALSE
+        SOURCE_SUBDIR lm-populate-only
     )
 endif()
 
@@ -308,12 +321,19 @@ if(LM_IMGUI_BUILD_IMGUI_NODE_EDITOR)
 endif()
 
 # ImGuizmo
+# Upstream moved the sources under src/ in 2026; keep working with either
+# layout so the pin can move back and forth without editing this block.
 if(LM_IMGUI_BUILD_IMGUIZMO)
-    file(GLOB IMGUIZMO_SOURCES ${imguizmo_SOURCE_DIR}/*.cpp)
-    file(GLOB IMGUIZMO_HEADERS ${imguizmo_SOURCE_DIR}/*.h)
+    if(EXISTS ${imguizmo_SOURCE_DIR}/src/ImGuizmo.cpp)
+        set(IMGUIZMO_SRC_DIR ${imguizmo_SOURCE_DIR}/src)
+    else()
+        set(IMGUIZMO_SRC_DIR ${imguizmo_SOURCE_DIR})
+    endif()
+    file(GLOB IMGUIZMO_SOURCES ${IMGUIZMO_SRC_DIR}/*.cpp)
+    file(GLOB IMGUIZMO_HEADERS ${IMGUIZMO_SRC_DIR}/*.h)
     list(APPEND ALL_SOURCES ${IMGUIZMO_SOURCES})
     list(APPEND ALL_HEADERS ${IMGUIZMO_HEADERS})
-    list(APPEND ALL_INCLUDE_DIRS ${imguizmo_SOURCE_DIR})
+    list(APPEND ALL_INCLUDE_DIRS ${IMGUIZMO_SRC_DIR})
 endif()
 
 # ImGui Color Text Edit
@@ -541,12 +561,12 @@ endif()
 # ImGuizmo headers
 if(LM_IMGUI_BUILD_IMGUIZMO)
     install(FILES
-        ${imguizmo_SOURCE_DIR}/ImGuizmo.h
-        ${imguizmo_SOURCE_DIR}/ImCurveEdit.h
-        ${imguizmo_SOURCE_DIR}/ImGradient.h
-        ${imguizmo_SOURCE_DIR}/ImSequencer.h
-        ${imguizmo_SOURCE_DIR}/ImZoomSlider.h
-        ${imguizmo_SOURCE_DIR}/GraphEditor.h
+        ${IMGUIZMO_SRC_DIR}/ImGuizmo.h
+        ${IMGUIZMO_SRC_DIR}/ImCurveEdit.h
+        ${IMGUIZMO_SRC_DIR}/ImGradient.h
+        ${IMGUIZMO_SRC_DIR}/ImSequencer.h
+        ${IMGUIZMO_SRC_DIR}/ImZoomSlider.h
+        ${IMGUIZMO_SRC_DIR}/GraphEditor.h
         DESTINATION include/imgui_bundle
     )
 endif()
