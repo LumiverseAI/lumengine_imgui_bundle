@@ -439,6 +439,10 @@ target_compile_definitions(imgui_bundle
     PUBLIC
         IMGUI_USER_CONFIG="${IMGUI_USER_CONFIG_PATH}"
         IMGUI_BUNDLE_PYTHON_API
+        # ImCoolBar decorates its API with IMCOOLBAR_API, which defaults to
+        # nothing, so its symbols never left the shared library. Route it
+        # through IMGUI_API so it exports and imports like everything else.
+        IMCOOLBAR_API=IMGUI_API
     PRIVATE
         imgui_bundle_EXPORTS  # Define export macro for DLL building
 )
