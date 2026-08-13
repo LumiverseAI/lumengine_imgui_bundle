@@ -57,7 +57,7 @@
 //#define ImDrawIdx unsigned int
 
 //---- Define IMGUI_DEFINE_MATH_OPERATORS to use Dear ImGui's own very basic math operators.
-//#define IMGUI_DEFINE_MATH_OPERATORS
+#define IMGUI_DEFINE_MATH_OPERATORS
 
 //---- Don't define obsolete functions/enums/behaviors. Consider enabling from time to time after updating.
 //#define IMGUI_DISABLE_OBSOLETE_FUNCTIONS
