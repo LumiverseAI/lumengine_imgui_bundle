@@ -622,7 +622,7 @@ endif()
 # ImGui Cool Bar headers
 if(LM_IMGUI_BUILD_IMGUI_COOL_BAR)
     install(FILES
-        ${imgui_cool_bar_SOURCE_DIR}/ImCoolbar.h
+        ${imgui_cool_bar_SOURCE_DIR}/ImCoolBar.h
         DESTINATION include/imgui_bundle
     )
 endif()
