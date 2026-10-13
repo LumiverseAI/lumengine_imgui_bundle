@@ -23,7 +23,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 # back to its new default exactly once. Bump the id in the same commit as the
 # pins. An explicit -DLM_*_GIT_TAG=... on the command line still wins, it is
 # simply re-applied on top of a refreshed generation.
-set(_LM_PIN_GENERATION "2026.08-imgui-1.92.8")
+set(_LM_PIN_GENERATION "2026.10-imgui-1.92.9b")
 set(_lm_pin_force "")
 if(NOT DEFINED LM_IMGUI_BUNDLE_PIN_GENERATION OR
    NOT LM_IMGUI_BUNDLE_PIN_GENERATION STREQUAL _LM_PIN_GENERATION)
@@ -33,18 +33,18 @@ endif()
 set(LM_IMGUI_BUNDLE_PIN_GENERATION "${_LM_PIN_GENERATION}"
     CACHE INTERNAL "Generation id of the dependency pin set")
 
-set(LM_IMGUI_GIT_TAG "de2079f09" CACHE STRING "ImGui git commit/tag" ${_lm_pin_force})
-set(LM_IMPLOT_GIT_TAG "a3226777f" CACHE STRING "ImPlot git commit/tag" ${_lm_pin_force})
-set(LM_IMPLOT3D_GIT_TAG "be541bc3f" CACHE STRING "ImPlot3D git commit/tag" ${_lm_pin_force})
-set(LM_IMGUI_NODE_EDITOR_GIT_TAG "afa40649f" CACHE STRING "ImGui Node Editor git commit/tag" ${_lm_pin_force})
-set(LM_IMGUIZMO_GIT_TAG "a25157a6e" CACHE STRING "ImGuizmo git commit/tag" ${_lm_pin_force})
-set(LM_IMGUI_COLOR_TEXT_EDIT_GIT_TAG "20bc1ec8f" CACHE STRING "ImGui Color Text Edit git commit/tag" ${_lm_pin_force})
-set(LM_IMGUI_MD_GIT_TAG "1f131466a" CACHE STRING "ImGui Markdown git commit/tag" ${_lm_pin_force})
-set(LM_MD4C_GIT_TAG "481fbfbdf" CACHE STRING "md4c git commit/tag" ${_lm_pin_force})
-set(LM_IMGUI_TOGGLE_GIT_TAG "a9d363b57" CACHE STRING "ImGui Toggle git commit/tag" ${_lm_pin_force})
-set(LM_IMGUI_KNOBS_GIT_TAG "68af3d5c9" CACHE STRING "ImGui Knobs git commit/tag" ${_lm_pin_force})
-set(LM_IMGUI_COMMAND_PALETTE_GIT_TAG "6f09a39" CACHE STRING "ImGui Command Palette git commit/tag" ${_lm_pin_force})
-set(LM_IMGUI_COOL_BAR_GIT_TAG "ee3b07d0f" CACHE STRING "ImGui Cool Bar git commit/tag" ${_lm_pin_force})
+set(LM_IMGUI_GIT_TAG "de2079f098dad2c461f8d0f40f3284291595288b" CACHE STRING "ImGui git commit/tag" ${_lm_pin_force})
+set(LM_IMPLOT_GIT_TAG "fa5b4e2f843db64a9a9ccc4357d3a74e4ca0b389" CACHE STRING "ImPlot git commit/tag" ${_lm_pin_force})
+set(LM_IMPLOT3D_GIT_TAG "be541bc3fe2397b53a69a380ce7a0e9024de6326" CACHE STRING "ImPlot3D git commit/tag" ${_lm_pin_force})
+set(LM_IMGUI_NODE_EDITOR_GIT_TAG "afa40649feba4ebce3bb4a21165d8e7740fede64" CACHE STRING "ImGui Node Editor git commit/tag" ${_lm_pin_force})
+set(LM_IMGUIZMO_GIT_TAG "a25157a6eb0882cbb331fbf2d9df90179319eb1c" CACHE STRING "ImGuizmo git commit/tag" ${_lm_pin_force})
+set(LM_IMGUI_COLOR_TEXT_EDIT_GIT_TAG "18ef6651de2483bbdf8e8759ea1f617f30cf605e" CACHE STRING "ImGui Color Text Edit git commit/tag" ${_lm_pin_force})
+set(LM_IMGUI_MD_GIT_TAG "1f131466a6563a5607376f2cf5389d9add7ed02d" CACHE STRING "ImGui Markdown git commit/tag" ${_lm_pin_force})
+set(LM_MD4C_GIT_TAG "481fbfbdf72daab2912380d62bb5f2187d438408" CACHE STRING "md4c git commit/tag" ${_lm_pin_force})
+set(LM_IMGUI_TOGGLE_GIT_TAG "a9d363b57e8d7cb701d1247d5fb7781f4fc5bab7" CACHE STRING "ImGui Toggle git commit/tag" ${_lm_pin_force})
+set(LM_IMGUI_KNOBS_GIT_TAG "68af3d5c9876203bdcd5fa61271e5d48551bdc58" CACHE STRING "ImGui Knobs git commit/tag" ${_lm_pin_force})
+set(LM_IMGUI_COMMAND_PALETTE_GIT_TAG "6f09a396d2d09824c0bdd15683d14698754007bf" CACHE STRING "ImGui Command Palette git commit/tag" ${_lm_pin_force})
+set(LM_IMGUI_COOL_BAR_GIT_TAG "ee3b07d0f8a5672f78408bfddebfe6f78b357b6f" CACHE STRING "ImGui Cool Bar git commit/tag" ${_lm_pin_force})
 unset(_lm_pin_force)
 
 # Options to enable/disable each library component
@@ -105,7 +105,7 @@ endif()
 # ImGui Node Editor
 if(LM_IMGUI_BUILD_IMGUI_NODE_EDITOR)
     FetchContent_Declare(imgui_node_editor
-        GIT_REPOSITORY https://github.com/Lumengine/imgui-node-editor.git
+        GIT_REPOSITORY https://github.com/LumiverseAI/imgui-node-editor.git
         GIT_TAG ${LM_IMGUI_NODE_EDITOR_GIT_TAG}
         GIT_SHALLOW FALSE
     )
@@ -128,7 +128,7 @@ endif()
 # ImGui Color Text Edit
 if(LM_IMGUI_BUILD_IMGUI_COLOR_TEXT_EDIT)
     FetchContent_Declare(imgui_color_text_edit
-        GIT_REPOSITORY https://github.com/Lumengine/ImGuiColorTextEdit.git
+        GIT_REPOSITORY https://github.com/LumiverseAI/ImGuiColorTextEdit.git
         GIT_TAG ${LM_IMGUI_COLOR_TEXT_EDIT_GIT_TAG}
         GIT_SHALLOW FALSE
     )
@@ -143,7 +143,7 @@ if(LM_IMGUI_BUILD_IMGUI_MD)
     )
 
     FetchContent_Declare(imgui_md
-        GIT_REPOSITORY https://github.com/Lumengine/imgui_md.git
+        GIT_REPOSITORY https://github.com/LumiverseAI/imgui_md.git
         GIT_TAG ${LM_IMGUI_MD_GIT_TAG}
         GIT_SHALLOW FALSE
     )
@@ -152,7 +152,7 @@ endif()
 # ImGui Toggle
 if(LM_IMGUI_BUILD_IMGUI_TOGGLE)
     FetchContent_Declare(imgui_toggle
-        GIT_REPOSITORY https://github.com/Lumengine/imgui_toggle.git
+        GIT_REPOSITORY https://github.com/LumiverseAI/imgui_toggle.git
         GIT_TAG ${LM_IMGUI_TOGGLE_GIT_TAG}
         GIT_SHALLOW FALSE
     )
@@ -161,7 +161,7 @@ endif()
 # ImGui Knobs
 if(LM_IMGUI_BUILD_IMGUI_KNOBS)
     FetchContent_Declare(imgui_knobs
-        GIT_REPOSITORY https://github.com/Lumengine/imgui-knobs.git
+        GIT_REPOSITORY https://github.com/LumiverseAI/imgui-knobs.git
         GIT_TAG ${LM_IMGUI_KNOBS_GIT_TAG}
         GIT_SHALLOW FALSE
     )
@@ -170,7 +170,7 @@ endif()
 # ImGui Command Palette
 if(LM_IMGUI_BUILD_IMGUI_COMMAND_PALETTE)
     FetchContent_Declare(imgui_command_palette
-        GIT_REPOSITORY https://github.com/Lumengine/imgui-command-palette.git
+        GIT_REPOSITORY https://github.com/LumiverseAI/imgui-command-palette.git
         GIT_TAG ${LM_IMGUI_COMMAND_PALETTE_GIT_TAG}
         GIT_SHALLOW FALSE
     )

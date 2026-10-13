@@ -1,117 +1,76 @@
 # Lumengine ImGui Bundle
 
-A lightweight, customizable bundle of Dear ImGui and popular ImGui extensions for the Lumengine project. This bundle provides a clean CMake configuration with granular control over which libraries to include, avoiding unnecessary dependencies.
+This CMake bundle builds Dear ImGui and the extensions used by Lumengine into
+one shared library, `imgui_bundle`. It requires CMake 3.20 and C++17.
 
-## Features
-
-This bundle includes the following libraries:
-- **Dear ImGui** - Core immediate mode GUI library
-- **ImPlot** - Advanced plotting library
-- **ImPlot3D** - 3D plotting extension
-- **ImGui Node Editor** - Node-based editor interface
-- **ImGuizmo** - 3D gizmo manipulation
-- **ImGui Color Text Edit** - Syntax-highlighted text editor
-- **ImGui Markdown** - Markdown rendering
-- **ImGui Texture Inspector** - Texture inspection tool
-- **ImGui Toggle** - Toggle switches
-- **ImGui Knobs** - Knob/dial controls
-- **ImGui Command Palette** - Command palette interface
-- **ImGui Cool Bar** - Toolbar widget
-- **ImFile Dialog** - File dialog
-
-## Usage with FetchContent
-
-Add this to your project's CMakeLists.txt:
+## Integration
 
 ```cmake
 include(FetchContent)
-
-FetchContent_Declare(
-    lumengine_imgui_bundle
-    GIT_REPOSITORY https://github.com/YOUR_USERNAME/lumengine_imgui_bundle.git
-    GIT_TAG main
+FetchContent_Declare(lumengine_imgui_bundle
+    GIT_REPOSITORY https://github.com/LumiverseAI/lumengine_imgui_bundle.git
+    GIT_TAG <exact-reviewed-commit>
 )
-
-# Configure which libraries you want (all are ON by default)
-set(LM_IMGUI_BUILD_IMGUI ON CACHE BOOL "" FORCE)
-set(LM_IMGUI_BUILD_IMPLOT ON CACHE BOOL "" FORCE)
-set(LM_IMGUI_BUILD_IMPLOT3D ON CACHE BOOL "" FORCE)
-set(LM_IMGUI_BUILD_IMGUI_NODE_EDITOR ON CACHE BOOL "" FORCE)
-set(LM_IMGUI_BUILD_IMGUIZMO ON CACHE BOOL "" FORCE)
-set(LM_IMGUI_BUILD_IMGUI_COLOR_TEXT_EDIT ON CACHE BOOL "" FORCE)
-set(LM_IMGUI_BUILD_IMGUI_MD ON CACHE BOOL "" FORCE)
-set(LM_IMGUI_BUILD_IMGUI_TEX_INSPECT ON CACHE BOOL "" FORCE)
-set(LM_IMGUI_BUILD_IMGUI_TOGGLE ON CACHE BOOL "" FORCE)
-set(LM_IMGUI_BUILD_IMGUI_KNOBS ON CACHE BOOL "" FORCE)
-set(LM_IMGUI_BUILD_IMGUI_COMMAND_PALETTE ON CACHE BOOL "" FORCE)
-set(LM_IMGUI_BUILD_IMGUI_COOL_BAR ON CACHE BOOL "" FORCE)
-set(LM_IMGUI_BUILD_IMFILE_DIALOG ON CACHE BOOL "" FORCE)
-
 FetchContent_MakeAvailable(lumengine_imgui_bundle)
-
-# Link against your target
-target_link_libraries(your_target PRIVATE lumengine::lumengine_imgui_bundle)
+target_link_libraries(your_target PRIVATE imgui_bundle)
 ```
 
-## CMake Options
+Use an exact commit. Each dependency is also pinned to a full commit SHA in
+`CMakeLists.txt`. The pin generation refreshes older CMake cache values when
+this bundle is updated. Lumengine creates its own `Lumengine::ImGui_Bundle` alias.
 
-All options are `ON` by default. Set any to `OFF` to exclude that library:
+## Components
 
-| Option | Description |
-|--------|-------------|
-| `LM_IMGUI_BUILD_IMGUI` | Build Dear ImGui core (required by most libraries) |
-| `LM_IMGUI_BUILD_IMPLOT` | Build ImPlot |
-| `LM_IMGUI_BUILD_IMPLOT3D` | Build ImPlot3D |
-| `LM_IMGUI_BUILD_IMGUI_NODE_EDITOR` | Build ImGui Node Editor |
-| `LM_IMGUI_BUILD_IMGUIZMO` | Build ImGuizmo |
-| `LM_IMGUI_BUILD_IMGUI_COLOR_TEXT_EDIT` | Build ImGui Color Text Edit |
-| `LM_IMGUI_BUILD_IMGUI_MD` | Build ImGui Markdown |
-| `LM_IMGUI_BUILD_IMGUI_TEX_INSPECT` | Build ImGui Texture Inspector |
-| `LM_IMGUI_BUILD_IMGUI_TOGGLE` | Build ImGui Toggle |
-| `LM_IMGUI_BUILD_IMGUI_KNOBS` | Build ImGui Knobs |
-| `LM_IMGUI_BUILD_IMGUI_COMMAND_PALETTE` | Build ImGui Command Palette |
-| `LM_IMGUI_BUILD_IMGUI_COOL_BAR` | Build ImGui Cool Bar |
-| `LM_IMGUI_BUILD_IMFILE_DIALOG` | Build ImFile Dialog |
+Dear ImGui is always included. Each option below defaults to ON:
 
-## Building Standalone
+| Option | Library |
+| --- | --- |
+| LM_IMGUI_BUILD_IMPLOT | ImPlot |
+| LM_IMGUI_BUILD_IMPLOT3D | ImPlot3D |
+| LM_IMGUI_BUILD_IMGUI_NODE_EDITOR | ImGui Node Editor |
+| LM_IMGUI_BUILD_IMGUIZMO | ImGuizmo |
+| LM_IMGUI_BUILD_IMGUI_COLOR_TEXT_EDIT | ImGuiColorTextEdit |
+| LM_IMGUI_BUILD_IMGUI_MD | imgui_md and md4c |
+| LM_IMGUI_BUILD_IMGUI_TOGGLE | imgui_toggle |
+| LM_IMGUI_BUILD_IMGUI_KNOBS | imgui-knobs |
+| LM_IMGUI_BUILD_IMGUI_COMMAND_PALETTE | imgui-command-palette |
+| LM_IMGUI_BUILD_IMGUI_COOL_BAR | ImCoolBar |
 
-```bash
-mkdir build
-cd build
-cmake ..
-cmake --build .
+Win32 is enabled on Windows. DX11, DX12, and OpenGL3 backends are opt-in via
+`LM_IMGUI_BACKEND_DX11`, `LM_IMGUI_BACKEND_DX12`, and `LM_IMGUI_BACKEND_OPENGL3`.
+ImSpinner, ImFileDialog, and texture inspection are not supplied by this bundle.
+
+## October 2026 dependency update
+
+The compatibility reference is pthom/imgui_bundle v1.92.900. Dear ImGui remains
+at 1.92.9b (`de2079f098dad2c461f8d0f40f3284291595288b`), which already contains
+fixes beyond that release's submodule pin. ImPlot moves to
+`fa5b4e2f843db64a9a9ccc4357d3a74e4ca0b389`.
+
+ImGuiColorTextEdit merges upstream `bc5bb95db077aea273b365a5b41a97a4c83e2f0f`
+while retaining Lumengine's DLL exports, hover accessors, autocomplete accessors
+and popup behavior. `Render` now returns whether the document changed. The
+other extension pins already contain the stable changes plus necessary DLL
+export patches. Their `lumengine` branches may be newer than their default
+branches; never update those forks from their default branch blindly.
+
+The bundle defines `IMGUI_BUNDLE_PYTHON_API`. Python bindings belong to the
+Lumengine consumer and must be regenerated from these exact fetched headers.
+The 1.93 WIP branch and the replacement Markdown library are not part of this
+stable update.
+
+## Standalone build
+
+```sh
+cmake -S . -B build
+cmake --build build --config Release
 ```
 
-To disable specific libraries:
+The consumer chooses runtime and SDK install components. Headers are available
+through the target's `PUBLIC_HEADER` property; the shared library must be
+shipped alongside applications that use it.
 
-```bash
-cmake .. -DLM_IMGUI_BUILD_IMPLOT=OFF -DLM_IMGUI_BUILD_IMPLOT3D=OFF
-cmake --build .
-```
+## Licenses
 
-## Requirements
-
-- CMake 3.20 or higher
-- C++17 compatible compiler
-- Git (for FetchContent)
-
-## Library Sources
-
-All libraries are fetched from pthom's forks at specific commits for stability:
-- ImGui: [74cba1e](https://github.com/pthom/imgui.git)
-- ImPlot: [2babf8b](https://github.com/pthom/implot.git)
-- ImPlot3D: [6a27385](https://github.com/pthom/implot3d.git)
-- ImGui Node Editor: [bb59cc7](https://github.com/pthom/imgui-node-editor.git)
-- ImGuizmo: [b2e2e00](https://github.com/pthom/ImGuizmo.git)
-- ImGui Color Text Edit: [e3f369f](https://github.com/pthom/ImGuiColorTextEdit.git)
-- ImGui Markdown: [acb65f6](https://github.com/pthom/imgui_md.git)
-- ImGui Tex Inspect: [77dd3e1](https://github.com/pthom/imgui_tex_inspect.git)
-- ImGui Toggle: [74c4100](https://github.com/pthom/imgui_toggle.git)
-- ImGui Knobs: [ee9db0b](https://github.com/pthom/imgui-knobs.git)
-- ImGui Command Palette: [ce7ec18](https://github.com/pthom/imgui-command-palette.git)
-- ImCoolBar: [7e184da](https://github.com/pthom/ImCoolBar.git)
-- ImFileDialog: [7d9ae51](https://github.com/pthom/ImFileDialog.git)
-
-## License
-
-Each library maintains its own license. Please refer to individual library repositories for licensing information
+Every dependency retains its upstream license. Consult the source repository
+and its license files for each component.
