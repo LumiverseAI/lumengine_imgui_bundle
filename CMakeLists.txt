@@ -402,6 +402,11 @@ if(LM_IMGUI_BUILD_IMGUI_COOL_BAR)
     list(APPEND ALL_INCLUDE_DIRS ${imgui_cool_bar_SOURCE_DIR})
 endif()
 
+# Dear ImGui Test Engine hooks (see imconfig.h): the relay that an engine, loaded from
+# its own module, registers into. It contains no engine code.
+list(APPEND ALL_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/lm_test_engine_relay.cpp)
+list(APPEND ALL_HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/lm_test_engine_relay.h)
+
 # ============================================================================
 # Create single shared library: imgui_bundle
 # ============================================================================
