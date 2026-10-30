@@ -74,3 +74,18 @@ shipped alongside applications that use it.
 
 Every dependency retains its upstream license. Consult the source repository
 and its license files for each component.
+
+## Dear ImGui Test Engine hooks
+
+`imconfig.h` defines `IMGUI_ENABLE_TEST_ENGINE` for every build. Dear ImGui then
+calls four hook functions (item add, item info, log, find-item-debug-label); the
+item hooks only while an engine has switched them on for a running test.
+`lm_test_engine_relay.cpp` defines all four as forwards to a table of function
+pointers that is empty by default, so they do nothing until an engine, loaded from
+its own module, registers itself with `LmImGui_SetTestEngineHooks()` and clears
+the table again when it unloads. The relay contains no engine code.
+
+The relay also exports `LmImGui_FixupKeyChord()`, a wrapper for the one ImGui
+internal the engine calls that ImGui does not export, so the engine module forwards
+to ImGui's own implementation. Both functions are declared in
+`lm_test_engine_relay.h`.
