@@ -23,7 +23,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 # back to its new default exactly once. Bump the id in the same commit as the
 # pins. An explicit -DLM_*_GIT_TAG=... on the command line still wins, it is
 # simply re-applied on top of a refreshed generation.
-set(_LM_PIN_GENERATION "2026.10-imgui-1.92.9b")
+set(_LM_PIN_GENERATION "2026.10-imgui-1.93.0-node-editor-0.10")
 set(_lm_pin_force "")
 if(NOT DEFINED LM_IMGUI_BUNDLE_PIN_GENERATION OR
    NOT LM_IMGUI_BUNDLE_PIN_GENERATION STREQUAL _LM_PIN_GENERATION)
@@ -33,18 +33,18 @@ endif()
 set(LM_IMGUI_BUNDLE_PIN_GENERATION "${_LM_PIN_GENERATION}"
     CACHE INTERNAL "Generation id of the dependency pin set")
 
-set(LM_IMGUI_GIT_TAG "de2079f098dad2c461f8d0f40f3284291595288b" CACHE STRING "ImGui git commit/tag" ${_lm_pin_force})
-set(LM_IMPLOT_GIT_TAG "fa5b4e2f843db64a9a9ccc4357d3a74e4ca0b389" CACHE STRING "ImPlot git commit/tag" ${_lm_pin_force})
-set(LM_IMPLOT3D_GIT_TAG "be541bc3fe2397b53a69a380ce7a0e9024de6326" CACHE STRING "ImPlot3D git commit/tag" ${_lm_pin_force})
-set(LM_IMGUI_NODE_EDITOR_GIT_TAG "afa40649feba4ebce3bb4a21165d8e7740fede64" CACHE STRING "ImGui Node Editor git commit/tag" ${_lm_pin_force})
-set(LM_IMGUIZMO_GIT_TAG "a25157a6eb0882cbb331fbf2d9df90179319eb1c" CACHE STRING "ImGuizmo git commit/tag" ${_lm_pin_force})
-set(LM_IMGUI_COLOR_TEXT_EDIT_GIT_TAG "18ef6651de2483bbdf8e8759ea1f617f30cf605e" CACHE STRING "ImGui Color Text Edit git commit/tag" ${_lm_pin_force})
-set(LM_IMGUI_MD_GIT_TAG "1f131466a6563a5607376f2cf5389d9add7ed02d" CACHE STRING "ImGui Markdown git commit/tag" ${_lm_pin_force})
-set(LM_MD4C_GIT_TAG "481fbfbdf72daab2912380d62bb5f2187d438408" CACHE STRING "md4c git commit/tag" ${_lm_pin_force})
-set(LM_IMGUI_TOGGLE_GIT_TAG "a9d363b57e8d7cb701d1247d5fb7781f4fc5bab7" CACHE STRING "ImGui Toggle git commit/tag" ${_lm_pin_force})
+set(LM_IMGUI_GIT_TAG "ce5a44c49a34ff677f8bab16e1d4e62ee1e31c04" CACHE STRING "ImGui git commit/tag" ${_lm_pin_force})
+set(LM_IMPLOT_GIT_TAG "bdd0763f8c6361bda77e1f7d9d6f7204d0747e2a" CACHE STRING "ImPlot git commit/tag" ${_lm_pin_force})
+set(LM_IMPLOT3D_GIT_TAG "d82dc0da2632628ce5dbb7589dfa9246298a8960" CACHE STRING "ImPlot3D git commit/tag" ${_lm_pin_force})
+set(LM_IMGUI_NODE_EDITOR_GIT_TAG "393687f6564de8b307e17f3b84a1d74e0a6d0ae3" CACHE STRING "ImGui Node Editor git commit/tag" ${_lm_pin_force})
+set(LM_IMGUIZMO_GIT_TAG "09444f64e79d5122281024271261f6aa65f63376" CACHE STRING "ImGuizmo git commit/tag" ${_lm_pin_force})
+set(LM_IMGUI_COLOR_TEXT_EDIT_GIT_TAG "1cc43bdfd610aeb355301503ca4743f76f7fa37a" CACHE STRING "ImGui Color Text Edit git commit/tag" ${_lm_pin_force})
+set(LM_IMGUI_MD_GIT_TAG "4dcad645fb94b2d0b8c73d96ce5c9d8f6c33f58d" CACHE STRING "ImGui Markdown git commit/tag" ${_lm_pin_force})
+set(LM_MD4C_GIT_TAG "f9e5eb232b95b737373ae706648cb75bd259ed1a" CACHE STRING "md4c git commit/tag" ${_lm_pin_force})
+set(LM_IMGUI_TOGGLE_GIT_TAG "bd62cdbc9b8b431a9f54d2d4e89fdc43070583c4" CACHE STRING "ImGui Toggle git commit/tag" ${_lm_pin_force})
 set(LM_IMGUI_KNOBS_GIT_TAG "68af3d5c9876203bdcd5fa61271e5d48551bdc58" CACHE STRING "ImGui Knobs git commit/tag" ${_lm_pin_force})
-set(LM_IMGUI_COMMAND_PALETTE_GIT_TAG "6f09a396d2d09824c0bdd15683d14698754007bf" CACHE STRING "ImGui Command Palette git commit/tag" ${_lm_pin_force})
-set(LM_IMGUI_COOL_BAR_GIT_TAG "ee3b07d0f8a5672f78408bfddebfe6f78b357b6f" CACHE STRING "ImGui Cool Bar git commit/tag" ${_lm_pin_force})
+set(LM_IMGUI_COMMAND_PALETTE_GIT_TAG "4715f978a0f967a6de4e66f6424cba02b6351353" CACHE STRING "ImGui Command Palette git commit/tag" ${_lm_pin_force})
+set(LM_IMGUI_COOL_BAR_GIT_TAG "37ac039043ced35a696fd12c79442d61e5c67ba8" CACHE STRING "ImGui Cool Bar git commit/tag" ${_lm_pin_force})
 unset(_lm_pin_force)
 
 # Options to enable/disable each library component
