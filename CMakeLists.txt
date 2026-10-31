@@ -23,7 +23,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 # back to its new default exactly once. Bump the id in the same commit as the
 # pins. An explicit -DLM_*_GIT_TAG=... on the command line still wins, it is
 # simply re-applied on top of a refreshed generation.
-set(_LM_PIN_GENERATION "2026.10-imgui-1.93.0-node-editor-0.10")
+set(_LM_PIN_GENERATION "2026.10-imgui-1.93.0-node-editor-0.10-r2")
 set(_lm_pin_force "")
 if(NOT DEFINED LM_IMGUI_BUNDLE_PIN_GENERATION OR
    NOT LM_IMGUI_BUNDLE_PIN_GENERATION STREQUAL _LM_PIN_GENERATION)
@@ -38,7 +38,7 @@ set(LM_IMPLOT_GIT_TAG "bdd0763f8c6361bda77e1f7d9d6f7204d0747e2a" CACHE STRING "I
 set(LM_IMPLOT3D_GIT_TAG "d82dc0da2632628ce5dbb7589dfa9246298a8960" CACHE STRING "ImPlot3D git commit/tag" ${_lm_pin_force})
 set(LM_IMGUI_NODE_EDITOR_GIT_TAG "393687f6564de8b307e17f3b84a1d74e0a6d0ae3" CACHE STRING "ImGui Node Editor git commit/tag" ${_lm_pin_force})
 set(LM_IMGUIZMO_GIT_TAG "09444f64e79d5122281024271261f6aa65f63376" CACHE STRING "ImGuizmo git commit/tag" ${_lm_pin_force})
-set(LM_IMGUI_COLOR_TEXT_EDIT_GIT_TAG "1cc43bdfd610aeb355301503ca4743f76f7fa37a" CACHE STRING "ImGui Color Text Edit git commit/tag" ${_lm_pin_force})
+set(LM_IMGUI_COLOR_TEXT_EDIT_GIT_TAG "5a612c68875c96231bdc571bb916755c7ed451a5" CACHE STRING "ImGui Color Text Edit git commit/tag" ${_lm_pin_force})
 set(LM_IMGUI_MD_GIT_TAG "4dcad645fb94b2d0b8c73d96ce5c9d8f6c33f58d" CACHE STRING "ImGui Markdown git commit/tag" ${_lm_pin_force})
 set(LM_MD4C_GIT_TAG "f9e5eb232b95b737373ae706648cb75bd259ed1a" CACHE STRING "md4c git commit/tag" ${_lm_pin_force})
 set(LM_IMGUI_TOGGLE_GIT_TAG "bd62cdbc9b8b431a9f54d2d4e89fdc43070583c4" CACHE STRING "ImGui Toggle git commit/tag" ${_lm_pin_force})
