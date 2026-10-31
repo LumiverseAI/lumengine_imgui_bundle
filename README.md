@@ -84,3 +84,6 @@ cmake -S tests/consumer -B build-consumer -DCMAKE_PREFIX_PATH=/path/to/install
 cmake --build build-consumer
 ctest --test-dir build-consumer --output-on-failure
 ```
+
+For an installation built by Lumengine, also pass `-DBUNDLE_USE_WCHAR32=ON`,
+matching its public `IMGUI_USE_WCHAR32` build setting.
