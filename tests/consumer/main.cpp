@@ -2,10 +2,22 @@
 #include <imgui_node_editor.h>
 #include <TextEditor.h>
 #include <string>
+#include <cstring>
 int main() {
     ImGui::CreateContext();
     ax::NodeEditor::Config config;
-    config.SettingsName = nullptr;
+    std::string saved;
+    config.SettingsFile = nullptr;
+    config.UserPointer = &saved;
+    config.SaveSettings = [](const char* data, size_t size, ax::NodeEditor::SaveReasonFlags, void* user) {
+        static_cast<std::string*>(user)->assign(data, size);
+        return true;
+    };
+    config.LoadSettings = [](char* data, void* user) {
+        const auto& value = *static_cast<std::string*>(user);
+        if (data) std::memcpy(data, value.data(), value.size());
+        return value.size();
+    };
     auto* editor = ax::NodeEditor::CreateEditor(&config);
     ax::NodeEditor::SetCurrentEditor(editor);
     auto& io = ImGui::GetIO();
@@ -29,20 +41,20 @@ int main() {
     frame();
     frame();
     frame();
-    ax::NodeEditor::NodeState state{};
-    state.Id = 1;
-    state.Position = ImVec2(12.0f, 34.0f);
-    ax::NodeEditor::SetNodeState(state);
+    ax::NodeEditor::SetNodePosition(1, ImVec2(12.0f, 34.0f));
+    ax::NodeEditor::SelectNode(1);
     frame();
-    std::string saved = ax::NodeEditor::SaveSettingsToMemory();
-    ax::NodeEditor::ClearState();
-    ax::NodeEditor::LoadSettingsFromMemory(saved.c_str());
+    ax::NodeEditor::SetCurrentEditor(nullptr);
+    ax::NodeEditor::DestroyEditor(editor);
+    editor = ax::NodeEditor::CreateEditor(&config);
+    ax::NodeEditor::SetCurrentEditor(editor);
     frame();
-    ax::NodeEditor::NodeState restored{};
-    bool valid = ax::NodeEditor::GetNodeState(1, &restored) && restored.Position.x == 12.0f;
+    frame();
+    const auto restored = ax::NodeEditor::GetNodePosition(1);
+    bool valid = restored.x == 12.0f && restored.y == 34.0f && ax::NodeEditor::IsNodeSelected(1);
     TextEditor text;
     text.SetText("exported consumer");
-    valid = valid && !text.GetText().empty() && ax::NodeEditor::GetSelectedNodes().empty();
+    valid = valid && !text.GetText().empty() && ax::NodeEditor::GetSelectedNodes().size() == 1;
     ax::NodeEditor::DestroyEditor(editor);
     ImGui::DestroyContext();
     return valid ? 0 : 1;
