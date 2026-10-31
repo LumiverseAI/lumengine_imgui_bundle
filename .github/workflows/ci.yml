@@ -1,0 +1,45 @@
+name: Installed bundle
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  installed-consumer:
+    name: SDK (${{ matrix.os }}, wchar32=${{ matrix.wchar32 }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, windows-2025]
+        wchar32: ["OFF", "ON"]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure library
+        shell: bash
+        run: |
+          flags=()
+          if [[ '${{ matrix.wchar32 }}' == 'ON' ]]; then
+            flags+=('-DCMAKE_CXX_FLAGS=-DIMGUI_USE_WCHAR32')
+          fi
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_INSTALL_PREFIX="$PWD/install" "${flags[@]}"
+      - name: Build and install library
+        run: |
+          cmake --build build --config Release --parallel 4
+          cmake --install build --config Release
+      - name: Configure external installed consumer
+        shell: bash
+        run: |
+          cmake -S tests/consumer -B consumer-build -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_PREFIX_PATH="$PWD/install" -DBUNDLE_USE_WCHAR32=${{ matrix.wchar32 }}
+      - name: Build external installed consumer
+        run: cmake --build consumer-build --config Release --parallel 4
+      - name: Test installed consumer
+        shell: bash
+        run: |
+          export PATH="$PWD/install/bin:$PATH"
+          ctest --test-dir consumer-build -C Release --output-on-failure --no-tests=error
