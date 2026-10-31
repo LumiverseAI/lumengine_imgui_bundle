@@ -42,22 +42,20 @@ ImSpinner, ImFileDialog, and texture inspection are not supplied by this bundle.
 
 ## October 2026 dependency update
 
-The compatibility reference is pthom/imgui_bundle v1.92.900. Dear ImGui remains
-at 1.92.9b (`de2079f098dad2c461f8d0f40f3284291595288b`), which already contains
-fixes beyond that release's submodule pin. ImPlot moves to
-`fa5b4e2f843db64a9a9ccc4357d3a74e4ca0b389`.
+The bundle pins Dear ImGui 1.93.0 with docking and stack layout, ImPlot 1.1,
+ImPlot3D 0.5, and Node Editor 0.10 WIP at upstream revision
+`27bcacec350a37db43e3afb8d37223237912577c`. Every dependency is pinned to an
+exact commit in CMake. Node Editor's blueprints runtime is not included.
 
-ImGuiColorTextEdit merges upstream `bc5bb95db077aea273b365a5b41a97a4c83e2f0f`
-while retaining Lumengine's DLL exports, hover accessors, autocomplete accessors
-and popup behavior. `Render` now returns whether the document changed. The
-other extension pins already contain the stable changes plus necessary DLL
-export patches. Their `lumengine` branches may be newer than their default
-branches; never update those forks from their default branch blindly.
+The Lumengine forks preserve DLL exports and Python convenience APIs while
+merging their upstream changes. TextEditor also retains its hover accessors.
+Some forks use a `lumengine` integration branch rather than their default branch.
+ImGui Knobs was already current and keeps its existing revision.
 
 The bundle defines `IMGUI_BUNDLE_PYTHON_API`. Python bindings belong to the
 Lumengine consumer and must be regenerated from these exact fetched headers.
-The 1.93 WIP branch and the replacement Markdown library are not part of this
-stable update.
+Node Editor 0.10 replaces save callbacks with explicit state and persistence
+APIs; consumers must adapt rather than patch downloaded sources during configure.
 
 ## Standalone build
 
