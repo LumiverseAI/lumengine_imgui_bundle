@@ -21,8 +21,8 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 # configured before a bump silently keeps fetching the previous commits. Stamp
 # the pin set with a generation id: when it changes, every pin below is forced
 # back to its new default exactly once. Bump the id in the same commit as the
-# pins. An explicit -DLM_*_GIT_TAG=... on the command line still wins, it is
-# simply re-applied on top of a refreshed generation.
+# pins. A generation change also resets custom cached pins. To experiment,
+# configure once to refresh the generation, then reapply -DLM_*_GIT_TAG overrides.
 set(_LM_PIN_GENERATION "2026.10-imgui-1.93.0-node-editor-0.9.4-r2")
 set(_lm_pin_force "")
 if(NOT DEFINED LM_IMGUI_BUNDLE_PIN_GENERATION OR

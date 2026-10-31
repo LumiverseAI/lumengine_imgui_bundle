@@ -4,6 +4,10 @@
 #include <string>
 #include <cstring>
 int main() {
+    // Call directly so the ABI check also runs with NDEBUG (Release builds).
+    if (!ImGui::DebugCheckVersionAndDataLayout(IMGUI_VERSION, sizeof(ImGuiIO), sizeof(ImGuiStyle),
+            sizeof(ImVec2), sizeof(ImVec4), sizeof(ImDrawVert), sizeof(ImDrawIdx)))
+        return 1;
     ImGui::CreateContext();
     ax::NodeEditor::Config config;
     std::string saved;

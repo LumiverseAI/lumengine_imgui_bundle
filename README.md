@@ -17,7 +17,10 @@ target_link_libraries(your_target PRIVATE imgui_bundle)
 
 Use an exact commit. Each dependency is also pinned to a full commit SHA in
 `CMakeLists.txt`. The pin generation refreshes older CMake cache values when
-this bundle is updated. Lumengine creates its own `Lumengine::ImGui_Bundle` alias.
+this bundle is updated, including custom cached pins. For a local dependency
+experiment, configure once to apply the new generation, then reconfigure with
+`-DLM_<LIBRARY>_GIT_TAG=<commit>`. Those overrides persist until the next generation.
+Lumengine creates its own `Lumengine::ImGui_Bundle` alias.
 
 ## Components
 
@@ -43,8 +46,8 @@ ImSpinner, ImFileDialog, and texture inspection are not supplied by this bundle.
 ## October 2026 dependency update
 
 The bundle pins Dear ImGui 1.93.0 with docking and stack layout, ImPlot 1.1,
-ImPlot3D 0.5, and Node Editor 0.10 WIP at upstream revision
-`27bcacec350a37db43e3afb8d37223237912577c`. Every dependency is pinned to an
+ImPlot3D 0.5, and the stable Node Editor 0.9.4 API from pthom revision
+`d39c6ff6efb99083d2278bd7abb91e03fb3d61d9`. Every dependency is pinned to an
 exact commit in CMake. Node Editor's blueprints runtime is not included.
 
 The Lumengine forks preserve DLL exports and Python convenience APIs while
@@ -54,8 +57,9 @@ ImGui Knobs was already current and keeps its existing revision.
 
 The bundle defines `IMGUI_BUNDLE_PYTHON_API`. Python bindings belong to the
 Lumengine consumer and must be regenerated from these exact fetched headers.
-Node Editor 0.10 replaces save callbacks with explicit state and persistence
-APIs; consumers must adapt rather than patch downloaded sources during configure.
+Node Editor retains its stable settings callbacks and `Config::SettingsFile`.
+Set the file to `nullptr` for document-owned persistence. Consumers must use
+these APIs rather than patch downloaded sources during configure.
 
 ## Standalone build
 
@@ -76,7 +80,8 @@ and its license files for each component.
 ## Installed consumer check
 
 After building and installing the bundle, configure this independent consumer
-against the installation prefix. It checks exported Node Editor state APIs and
+against the installation prefix. It checks the ImGui header/library ABI, exported Node Editor callback persistence
+(position and selection across recreated contexts), owning selection helpers, and
 TextEditor symbols without access to dependency source directories.
 
 ```sh
@@ -87,3 +92,7 @@ ctest --test-dir build-consumer --output-on-failure
 
 For an installation built by Lumengine, also pass `-DBUNDLE_USE_WCHAR32=ON`,
 matching its public `IMGUI_USE_WCHAR32` build setting.
+
+The installed-consumer CI builds and tests the full bundle on Windows and Linux,
+with both the default character width and `IMGUI_USE_WCHAR32`. The consumer uses
+only installed headers and the installed shared library.
