@@ -23,7 +23,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 # back to its new default exactly once. Bump the id in the same commit as the
 # pins. An explicit -DLM_*_GIT_TAG=... on the command line still wins, it is
 # simply re-applied on top of a refreshed generation.
-set(_LM_PIN_GENERATION "2026.10-imgui-1.93.0-node-editor-0.10-r2")
+set(_LM_PIN_GENERATION "2026.10-imgui-1.93.0-node-editor-0.10-r3")
 set(_lm_pin_force "")
 if(NOT DEFINED LM_IMGUI_BUNDLE_PIN_GENERATION OR
    NOT LM_IMGUI_BUNDLE_PIN_GENERATION STREQUAL _LM_PIN_GENERATION)
@@ -36,7 +36,7 @@ set(LM_IMGUI_BUNDLE_PIN_GENERATION "${_LM_PIN_GENERATION}"
 set(LM_IMGUI_GIT_TAG "ce5a44c49a34ff677f8bab16e1d4e62ee1e31c04" CACHE STRING "ImGui git commit/tag" ${_lm_pin_force})
 set(LM_IMPLOT_GIT_TAG "bdd0763f8c6361bda77e1f7d9d6f7204d0747e2a" CACHE STRING "ImPlot git commit/tag" ${_lm_pin_force})
 set(LM_IMPLOT3D_GIT_TAG "d82dc0da2632628ce5dbb7589dfa9246298a8960" CACHE STRING "ImPlot3D git commit/tag" ${_lm_pin_force})
-set(LM_IMGUI_NODE_EDITOR_GIT_TAG "393687f6564de8b307e17f3b84a1d74e0a6d0ae3" CACHE STRING "ImGui Node Editor git commit/tag" ${_lm_pin_force})
+set(LM_IMGUI_NODE_EDITOR_GIT_TAG "ab06eeddbdf222a4716b3465ffd43349a5bd5f4e" CACHE STRING "ImGui Node Editor git commit/tag" ${_lm_pin_force})
 set(LM_IMGUIZMO_GIT_TAG "09444f64e79d5122281024271261f6aa65f63376" CACHE STRING "ImGuizmo git commit/tag" ${_lm_pin_force})
 set(LM_IMGUI_COLOR_TEXT_EDIT_GIT_TAG "5a612c68875c96231bdc571bb916755c7ed451a5" CACHE STRING "ImGui Color Text Edit git commit/tag" ${_lm_pin_force})
 set(LM_IMGUI_MD_GIT_TAG "4dcad645fb94b2d0b8c73d96ce5c9d8f6c33f58d" CACHE STRING "ImGui Markdown git commit/tag" ${_lm_pin_force})
