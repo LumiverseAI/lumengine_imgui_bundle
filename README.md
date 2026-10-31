@@ -74,3 +74,15 @@ shipped alongside applications that use it.
 
 Every dependency retains its upstream license. Consult the source repository
 and its license files for each component.
+
+## Installed consumer check
+
+After building and installing the bundle, configure this independent consumer
+against the installation prefix. It checks exported Node Editor state APIs and
+TextEditor symbols without access to dependency source directories.
+
+```sh
+cmake -S tests/consumer -B build-consumer -DCMAKE_PREFIX_PATH=/path/to/install
+cmake --build build-consumer
+ctest --test-dir build-consumer --output-on-failure
+```
