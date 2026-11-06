@@ -65,3 +65,11 @@
 //---- Disable demo windows and debug tools (not recommended during development)
 //#define IMGUI_DISABLE_DEMO_WINDOWS
 //#define IMGUI_DISABLE_DEBUG_TOOLS
+
+//---- Dear ImGui Test Engine hooks, for every build.
+// ImGui then calls four hook functions: the item hooks only while the engine has switched
+// them on for a running test, the log hook always. lm_test_engine_relay.cpp defines all four
+// as forwards to a table that is empty until an engine registers itself, so they do nothing
+// by default. This adds enum values only: it does not change the layout of any context
+// structure, so code compiled with and without the engine agrees.
+#define IMGUI_ENABLE_TEST_ENGINE
